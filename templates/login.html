@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+    .card {
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      background: linear-gradient(#205e9c, #c53737);
+      opacity: 0.7;
+    }
+    .form-control {
+      border-radius: 10px;
+    }
+    .btn-custom {
+      border-radius: 10px;
+      font-weight: 500;
+    }
+    #ima{
+        width: 400px;
+        height: 130px;
+    }
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;  
+      z-index: -1;        
+    }
+
+  </style>
+</head>
+<body>
+    <video autoplay muted loop id="bg-video">
+        <!-- <source src="{% static 'videos/bg2.mp4' %}"> -->
+         <source src="https://my-cloudshield.s3.eu-north-1.amazonaws.com/bg2.mp4">
+    </video>
+  <div class="container">
+    <div class="row justify-content-center">
+        <div class="text-center">
+        <img id="ima" src="{% static 'images/logo-transparent.png' %}" alt="App Logo" class="logo-img">
+        <h3 class="mb-4">LOGIN TO HEADPULSE</h3></div>
+      <div class="col-md-5">
+        <div class="card p-4">
+          <h3 class="text-center text-white mb-4">Login</h3>
+
+          <form action="{% url 'login' %}" method="POST">
+            {% csrf_token %}
+            
+            <!-- Username -->
+            <div class="mb-3">
+              <label class="form-label text-white">Username</label>
+              <input type="text" class="form-control" name="username" placeholder="Enter your username" required>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+              <label class="form-label text-white">Password</label>
+              <input type="password" class="form-control" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-custom">Login</button>
+            </div>
+          </form>
+
+          <!-- Register Link -->
+          <p class="text-center text-white mt-3">
+            Don’t have an account? 
+            <a href="{% url 'register' %}" class="text-decoration-none">Register</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HeadPulse | Trending</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .page-title {
+      text-align: center;
+      font-weight: 700;
+      margin: 30px 0;
+      color: #1a1a1a;
+    }
+    .video-card {
+      border: none;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0px 6px 15px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease-in-out;
+      background: #fff;
+    }
+    .video-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0px 12px 25px rgba(0,0,0,0.15);
+    }
+    .video-header {
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #007bff, #6610f2);
+      color: #fff;
+      padding: 8px 12px;
+    }
+    .video-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #222;
+      margin-top: 10px;
+    }
+    .video-description {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 10px;
+    }
+    iframe, video {
+      width: 100%;
+      height: 250px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+    <div class="bg-dark text-light px-3 py-2 d-flex justify-content-between align-items-center">
+    <div><i class="bi bi-clock"></i> {{ current_time }}</div>
+    <marquee behavior="scroll" direction="left" scrollamount="6">
+      <strong>Breaking:</strong>
+      {% for data in breaking %}
+        {{ data.title }}{% if not forloop.last %} &nbsp; | &nbsp; {% endif %}
+      {% endfor %}
+    </marquee>
+  </div>
+
+  <nav class="navbar navbar-expand bg-danger py-3">
+    <div class="container-fluid d-flex justify-content-center">
+      <P class="navbar-brand m-0 p-0">HEADPULSE</p>
+    </div>
+  </nav>
+  <div class="container">
+    <h1 class="page-title"><i class="bi bi-play-circle-fill text-primary"></i> Trending </h1>
+
+    <div class="row">
+      {% for videos in video %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card video-card">
+          <div class="video-header">
+            {{ videos.category }}
+          </div>
+          <div class="card-body">
+            <h5 class="video-title">{{ videos.title }}</h5>
+            <p class="video-description">{{ videos.description|truncatewords:20 }}</p>
+
+            {% if videos.youtube_url %}
+              <iframe src="{{ videos.youtube_url }}" title="YouTube video player" frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            {% elif videos.video_file %}
+              <video controls>
+                <source src="{{ videos.video_file.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center">No videos available yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

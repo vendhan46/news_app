@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/logo-transparent.png' %}" type="image/png">
+    <title>HEADPULSE</title> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <style>
+        body{
+            margin-right: 50px;
+            margin-left:50px;
+        }
+        #carouselExampleCaptions{
+            margin-top: 20px;
+            height: 300px;
+        }
+        #img{
+            height: 300px;
+        }
+        footer a:hover {
+            text-decoration: underline;
+            color: #ccc;
+        }
+        .carousel-caption-top {
+        top: 20px;
+        bottom: auto;
+        text-align: left;
+        }
+        #head_link{
+            font-size: 20px;
+            color: white;
+            text-decoration: none;
+        }
+        #head_link:hover{
+            text-decoration: underline;
+            color:rgb(23, 23, 249);
+        }
+        .image-overlay-container {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .image-overlay-container img {
+          width: 100%;
+          display: block;
+          transition: 0.5s ease;
+        }
+
+        .image-overlay-container .overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+          background-color: rgba(128, 128, 128, 0.5); /* gray with opacity */
+          opacity: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transition: 0.5s ease;
+        }
+
+        .image-overlay-container:hover img {
+          opacity: 0.5;
+        }
+
+        .image-overlay-container:hover .overlay {
+          opacity: 1;
+        }
+
+        .readmore-btn {
+          z-index: 2;
+          background-color: white;
+          color: black;
+          border: 1px solid #000;
+          font-weight: bold;
+        }
+        .card-img-top{
+          height: 250px;
+          width: 100%;
+        }
+        .card-body{
+          height: 200px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="bg-dark text-light px-3 py-2 d-flex justify-content-between align-items-center">
+  <div><i class="bi bi-clock"></i> {{ current_time }}</div>
+  <marquee behavior="scroll" direction="left" scrollamount="6">
+    <strong>Breaking:</strong>
+    {% for data in breaking %}
+      {{ data.title }}{% if not forloop.last %} &nbsp; | &nbsp; {% endif %}
+    {% endfor %}
+  </marquee>
+</div>
+
+<nav class="navbar navbar-expand bg-danger py-3">
+  <div class="container-fluid d-flex justify-content-center">
+    <P class="navbar-brand m-0 p-0">HEADPULSE</p>
+  </div>
+</nav>
+<!-- 
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search" action="{% url 'search' %}" method="POST">
+        {% csrf_token %}
+        <input class="form-control me-2" name="search" type="search" placeholder="Search" aria-label="Search"/>
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav> -->
+
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    {% for article in articles %}
+    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+      <div class="card" style="width: 100%; overflow: hidden;">
+        <div class="image-overlay-container">
+          <img src="{{ article.image_url}}" class="card-img-top" alt="...">
+          <div class="overlay">
+            <a href="{{ article.url }}" class="btn btn-light readmore-btn">Read More</a>
+          </div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ article.title }}</h5>
+          <p class="card-text">{{ article.description }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<hr>
+
+
+
+<footer class="bg-dark text-white pt-5 pb-4">
+  <div class="container text-md-left">
+    <div class="row">
+
+      <!-- About / Company -->
+      <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+        <h5 class="text-uppercase mb-4 font-weight-bold">About Us</h5>
+        <p><a href="#" class="text-white text-decoration-none">Editorial Values</a></p>
+        <p><a href="#" class="text-white text-decoration-none">Contact</a></p>
+        <p><a href="#" class="text-white text-decoration-none">Careers</a></p>
+      </div>
+
+      <!-- News Categories -->
+      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+        <h5 class="text-uppercase mb-4 font-weight-bold">News</h5>
+        <p><a href="#" class="text-white text-decoration-none">National</a></p>
+        <p><a href="#" class="text-white text-decoration-none">International</a></p>
+        <p><a href="#" class="text-white text-decoration-none">Business</a></p>
+        <p><a href="#" class="text-white text-decoration-none">Sports</a></p>
+      </div>
+
+      <!-- States/Cities -->
+      <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+        <h5 class="text-uppercase mb-4 font-weight-bold">Cities</h5>
+        <p><a href="#" class="text-white text-decoration-none">Chennai</a></p>
+        <p><a href="#" class="text-white text-decoration-none">Bangalore</a></p>
+        <p><a href="#" class="text-white text-decoration-none">Delhi</a></p>
+        <p><a href="#" class="text-white text-decoration-none">Mumbai</a></p>
+      </div>
+
+      <!-- Social / Apps -->
+      <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+        <h5 class="text-uppercase mb-4 font-weight-bold">Connect</h5>
+        <p><a href="#" class="text-white text-decoration-none">Facebook</a></p>
+        <p><a href="#" class="text-white text-decoration-none">Twitter</a></p>
+        <p><a href="#" class="text-white text-decoration-none">Google Play</a></p>
+        <p><a href="#" class="text-white text-decoration-none">Apple Store</a></p>
+      </div>
+
+    </div>
+
+    <hr class="mb-4">
+
+    <!-- Footer Bottom -->
+    <div class="row align-items-center">
+      <div class="col-md-7 col-lg-8">
+        <p>© 2025 Your News Site. All rights reserved.</p>
+      </div>
+      <div class="col-md-5 col-lg-4">
+        <p class="text-end"><a href="#" class="text-white text-decoration-none">Privacy Policy</a> | <a href="#" class="text-white text-decoration-none">Terms of Use</a></p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" 
+integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+</body>
+</html>

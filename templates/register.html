@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+    .card {
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      background: linear-gradient(#205e9c, #c53737);
+      opacity: 0.7;
+    }
+    .form-control {
+      border-radius: 10px;
+    }
+    .btn-custom {
+      border-radius: 10px;
+      font-weight: 500;
+    }
+    #ima {
+      width: 200px;
+      height: 130px;
+    }
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Video -->
+  <video autoplay muted loop id="bg-video">
+    <source src="{% static 'videos/bg2.mp4' %}">
+  </video>
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="text-center">
+        <img id="ima" src="{% static 'images/logo-transparent.png' %}" alt="App Logo" class="logo-img">
+        <h3 class="mb-4">REGISTER TO HEADPULSE</h3>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card p-4">
+          <h3 class="text-center mb-4">Register</h3>
+
+          <!-- Django Messages -->
+          {% if messages %}
+            {% for message in messages %}
+              <p class="text-danger text-center">{{ message }}</p>
+            {% endfor %}
+          {% endif %}
+
+          <form id="registerForm" method="POST" action="{% url 'register' %}" enctype="multipart/form-data" onsubmit="return validateForm()">
+            {% csrf_token %}
+            
+            <!-- Username -->
+            <div class="mb-3">
+              <label class="form-label text-white">Username</label>
+              <input type="text" class="form-control" name="username" id="username" placeholder="Enter username" required>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+              <label class="form-label text-white">Password</label>
+              <input type="password" class="form-control" name="password" id="password" placeholder="Enter password" required>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+              <label class="form-label text-white">Email</label>
+              <input type="email" class="form-control" name="email" id="email" placeholder="Enter email" required>
+            </div>
+
+            <!-- Phone -->
+            <div class="mb-3">
+              <label class="form-label text-white">Phone</label>
+              <input type="text" class="form-control" name="phone" placeholder="Enter phone number" required>
+            </div>
+
+            <!-- Address -->
+            <div class="mb-3">
+              <label class="form-label text-white">Address</label>
+              <input type="text" class="form-control" name="address" placeholder="Enter address" required>
+            </div>
+
+            <!-- Interested Field -->
+            <div class="mb-3">
+              <label class="form-label text-white">Interested Field</label>
+              <input type="text" class="form-control" name="interested" placeholder="Enter your interested field" required>
+            </div>
+
+            <!-- Profile Image -->
+            <div class="mb-3">
+              <label class="form-label text-white">Profile Image</label>
+              <input type="file" class="form-control" name="image" required>
+            </div>
+
+            <!-- Submit -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-success btn-custom">Register</button>
+            </div>
+          </form>
+
+          <!-- Login Link -->
+          <p class="text-center text-white mt-3">
+            Already have an account? 
+            <a href="{% url 'login' %}" class="text-decoration-none">Login</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Form Validation -->
+  <script>
+    function validateForm() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const email = document.getElementById("email").value;
+
+      if (!/^[A-Z][a-zA-Z0-9]{5,}$/.test(username)) {
+        alert("Username must start with a capital letter and be at least 6 characters.");
+        return false;
+      }
+      if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$/.test(password)) {
+        alert("Password must be at least 8 characters long, include uppercase, lowercase and a number.");
+        return false;
+      }
+      const emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+      if (!emailPattern.test(email)) {
+        alert("Enter a valid email address.");
+        return false;
+      }
+      return true;
+    }
+  </script>
+</body>
+</html>

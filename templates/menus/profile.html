@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HEADPULSE | Profile</title>
+  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" 
+  integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+  <style>
+    body{
+      margin-right: 50px;
+      margin-left:50px;
+    }
+   
+    .profile-card {
+      max-width: 1100px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    /* Sidebar */
+    .profile-sidebar {
+      background: #4a69bd;
+      color: #fff;
+      flex: 1 1 300px;
+      padding: 40px 30px;
+      text-align: center;
+    }
+    .profile-avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #fff;
+      margin-bottom: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    .profile-name {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .profile-email {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    /* Form section */
+    .profile-form {
+      flex: 2 1 500px;
+      padding: 40px;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 30px;
+    }
+    .form-control {
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      padding: 12px 15px;
+      font-size: 0.95rem;
+    }
+    .form-control:focus {
+      border-color: #4a69bd;
+      box-shadow: 0 0 0 3px rgba(74,105,189,0.15);
+    }
+
+    /* Buttons */
+    .btn-primary-custom {
+      background: #4a69bd;
+      border: none;
+      border-radius: 30px;
+      padding: 12px 30px;
+      font-weight: 600;
+      color: #fff;
+      transition: 0.3s;
+    }
+    .btn-primary-custom:hover {
+      background: #3c54a5;
+      transform: translateY(-2px);
+    }
+    .btn-outline-custom {
+      border: 2px solid #4a69bd;
+      color: #4a69bd;
+      border-radius: 30px;
+      padding: 12px 30px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    .btn-outline-custom:hover {
+      background: #4a69bd;
+      color: #fff;
+    }
+
+    /* Responsive */
+    @media(max-width:768px) {
+      .profile-card {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-dark text-light px-3 py-2 d-flex justify-content-between align-items-center">
+  <div><i class="bi bi-clock"></i> {{ current_time }}</div>
+  <marquee behavior="scroll" direction="left" scrollamount="6">
+    <strong>Breaking:</strong>
+    {% for data in breaking %}
+      {{ data.title }}{% if not forloop.last %} &nbsp; | &nbsp; {% endif %}
+    {% endfor %}
+  </marquee>
+</div>
+
+<nav class="navbar navbar-expand bg-danger py-3">
+  <div class="container-fluid d-flex justify-content-center">
+    <P class="navbar-brand m-0 p-0">HEADPULSE</p>
+  </div>
+</nav>
+
+<!-- Profile Card -->
+<div class="profile-card">
+  <!-- Sidebar -->
+  <div class="profile-sidebar">
+    {% if data.image %}
+      <img src="{{ data.image.url }}" alt="Profile Picture" class="profile-avatar">
+    {% else %}
+      <img src="{% static 'images/default-profile.png' %}" alt="Default Profile" class="profile-avatar">
+    {% endif %}
+
+    <h3 class="profile-name">{{ data.username }}</h3>
+    <p class="profile-email">{{ data.email }}</p>
+  </div>
+
+  <!-- Form -->
+  <div class="profile-form">
+    <h2 class="section-title">Edit Profile</h2>
+    <form method="POST" action="/update/{{ data.id }}" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" name="username" value="{{ data.username }}" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" value="{{ data.email }}" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Full Name</label>
+        <input type="text" name="interested_field" value="{{ data.interested_field }}" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Phone Number</label>
+        <input type="tel" name="phone" value="{{ data.phone }}" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Address</label>
+        <input type="text" name="address" value="{{ data.address }}" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Profile Image</label>
+        <input type="file" name="image" class="form-control" accept="image/*">
+      </div>
+
+      <div class="d-flex gap-2 mt-4">
+        <button type="reset" class="btn btn-outline-custom">Cancel</button>
+        <button type="submit" class="btn btn-primary-custom">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

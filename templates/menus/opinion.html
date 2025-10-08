@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HeadPulse | Opinions & Editorials</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      min-height: 100vh;
+    }
+    h1, h3, h4 {
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    .card {
+      border-radius: 15px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    .opinion-form {
+      border-radius: 15px;
+      background: #ffffff;
+    }
+    .poll-box {
+      border: 2px solid #0d6efd;
+      padding: 20px;
+      border-radius: 15px;
+      background: #ffffff;
+    }
+    .section-title {
+      border-left: 5px solid #0d6efd;
+      padding-left: 10px;
+      margin-bottom: 20px;
+      color: #0d6efd;
+    }
+  </style>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/logo-transparent.png' %}" type="image/png">
+    <title>HEADPULSE</title> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <style>
+        body{
+            margin-right: 50px;
+            margin-left:50px;
+        }
+        #carouselExampleCaptions{
+            margin-top: 20px;
+            height: 300px;
+        }
+        #img{
+            height: 300px;
+        }
+        footer a:hover {
+            text-decoration: underline;
+            color: #ccc;
+        }
+        .carousel-caption-top {
+        top: 20px;
+        bottom: auto;
+        text-align: left;
+        }
+        #head_link{
+            font-size: 20px;
+            color: white;
+            text-decoration: none;
+        }
+        #head_link:hover{
+            text-decoration: underline;
+            color:rgb(23, 23, 249);
+        }
+        .image-overlay-container {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .image-overlay-container img {
+          width: 100%;
+          display: block;
+          transition: 0.5s ease;
+        }
+
+        .image-overlay-container .overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+          background-color: rgba(128, 128, 128, 0.5); /* gray with opacity */
+          opacity: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transition: 0.5s ease;
+        }
+
+        .image-overlay-container:hover img {
+          opacity: 0.5;
+        }
+
+        .image-overlay-container:hover .overlay {
+          opacity: 1;
+        }
+
+        .readmore-btn {
+          z-index: 2;
+          background-color: white;
+          color: black;
+          border: 1px solid #000;
+          font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="bg-dark text-light px-3 py-2 d-flex justify-content-between align-items-center">
+  <div><i class="bi bi-clock"></i> {{ current_time }}</div>
+  <marquee behavior="scroll" direction="left" scrollamount="6">
+    <strong>Breaking:</strong>
+    {% for data in breaking %}
+      {{ data.title }}{% if not forloop.last %} &nbsp; | &nbsp; {% endif %}
+    {% endfor %}
+  </marquee>
+</div>
+
+<nav class="navbar navbar-expand bg-danger py-3">
+  <div class="container-fluid d-flex justify-content-center">
+    <P class="navbar-brand m-0 p-0">HEADPULSE</p>
+  </div>
+</nav>
+  <div class="container py-5">
+    <!-- Page Heading -->
+    <!-- <div class="text-center mb-5">
+      <img src="{% static 'images/logo-transparent.png' %}" width="120" alt="HeadPulse Logo" class="mb-3">
+      <h1>Latest Opinions & Editorials</h1>
+      <p class="text-muted">Voices that matter – from our editors and readers.</p>
+    </div> -->
+
+    <!-- Top Editorials -->
+    <h3 class="section-title">Top Editorials Today</h3>
+    <div class="row">
+      {% for opinion in opinions %}
+      <div class="col-md-6 mb-4">
+        <div class="card p-4 shadow-sm h-100">
+          <h5 class="fw-bold">{{ opinion.title }}</h5>
+          <p class="text-muted">{{ opinion.content|truncatewords:30 }}</p>
+          <small class="text-secondary">
+            ✍️ By {{ opinion.author }} | {{ opinion.created_at|date:"d M Y" }}
+          </small>
+        </div>
+      </div>
+      {% empty %}
+      <p>No editorials yet.</p>
+      {% endfor %}
+    </div>
+
+    <!-- Reader Opinions -->
+    <h3 class="section-title mt-5">Reader's Opinions</h3>
+    <div class="list-group mb-4">
+      {% for ro in reader_opinions %}
+      <div class="list-group-item list-group-item-action">
+        <strong>{{ ro.name }}</strong>: {{ ro.message|truncatewords:20 }}
+      </div>
+      {% empty %}
+      <div class="list-group-item">No opinions submitted yet.</div>
+      {% endfor %}
+    </div>
+
+    <!-- Opinion Poll -->
+    {% if poll %}
+    <div class="poll-box mb-5">
+      <h4 class="fw-bold mb-3">{{ poll.question }}</h4>
+      <form method="post" action="">
+        {% csrf_token %}
+        <button type="submit" name="vote" value="yes" class="btn btn-success me-2">
+          <i class="bi bi-hand-thumbs-up"></i> Yes
+        </button>
+        <button type="submit" name="vote" value="no" class="btn btn-danger">
+          <i class="bi bi-hand-thumbs-down"></i> No
+        </button>
+      </form>
+      <p class="mt-3">✅ Yes: {{ poll.yes_votes }} | ❌ No: {{ poll.no_votes }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Submit Opinion -->
+    <h3 class="section-title">Write Your Opinion</h3>
+    <form method="POST" class="p-4 shadow opinion-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-send-fill"></i> Submit
+      </button>
+    </form>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

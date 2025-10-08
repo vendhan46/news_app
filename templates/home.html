@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEADPULSE</title> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body{
+            margin-right: 50px;
+            margin-left:50px;
+            background-color: white;
+        }
+        #carouselExampleCaptions{
+            margin-top: 20px;
+            height: 700px;
+        }
+        #img{
+            height: 700px;
+            border-radius: 20px;
+        }
+        footer a:hover {
+            text-decoration: underline;
+            color: #ccc;
+        }
+        .carousel-caption-top {
+        top: 20px;
+        bottom: auto;
+        text-align: left;
+        }
+        #head_link{
+            font-size: 20px;
+            color: white;
+            text-decoration: none;
+        }
+        #head_link:hover{
+            text-decoration: underline;
+            color:rgb(23, 23, 249);
+        }
+        .image-overlay-container {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .image-overlay-container img {
+          width: 100%;
+          display: block;
+          transition: 0.5s ease;
+        }
+
+        .image-overlay-container .overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+          background-color: rgba(55, 22, 200, 0.5); /* gray with opacity */
+          opacity: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transition: 0.5s ease;
+        }
+
+        .image-overlay-container:hover img {
+          opacity: 0.5;
+        }
+
+        .image-overlay-container:hover .overlay {
+          opacity: 1;
+        }
+
+        .readmore-btn {
+          z-index: 2;
+          background-color: white;
+          color: black;
+          border: 1px solid #000;
+          font-weight: bold;
+          border-radius: 5px;
+        }
+        .save-btn{
+          margin: 20px;
+        }
+        .card-img-top{
+          height: 250px;
+          width: 100%;
+        }
+        .card-body{
+          height: 200px;
+        }
+    </style>
+</head>
+<body>
+
+
+<!-- 
+{% if messages %}
+  <script>
+    {% for message in messages %}
+      alert("{{ message|escapejs }}");
+    {% endfor %}
+  </script>
+{% endif %} -->
+
+
+
+
+
+
+
+<div class="bg-white text-dark px-3 py-2 d-flex justify-content-between align-items-center">
+  <div><i class="bi bi-clock"></i> {{ current_time }}</div>
+  <marquee behavior="scroll" direction="left" scrollamount="6">
+    <strong>Breaking:</strong>
+    {% for data in breaking %}
+      {{ data.title }}{% if not forloop.last %} &nbsp; | &nbsp; {% endif %}
+    {% endfor %}
+  </marquee>
+</div>
+
+
+<nav class="navbar bg-transparent py-4 position-relative">
+  <div class="container-fluid d-flex justify-content-center align-items-center position-relative">
+    
+    <img src="{% static 'images/logo-transparent.png' %}" 
+         alt="HEADPULSE Logo"
+         class="position-absolute start-50 translate-middle-x"
+         style="height: 150px;"> 
+
+    <div class="position-absolute end-0 me-5 d-flex align-items-center gap-3">
+      <a href="{% url 'profile' %}" class="text-dark">
+        <i class="bi bi-person-workspace"></i>
+      </a>
+      <!-- <a href="#" class="text-dark">
+        <i class="bi bi-bookmark" id="bookmarkIcon"></i>
+      </a> -->
+      <a href="#" id="darkModeToggle" class="text-dark">
+        <i class="bi bi-circle-half" id="circlefill"></i>
+      </a>
+    </div>
+
+  </div>
+</nav>
+
+
+
+<nav class="navbar navbar-expand-lg sticky-top bg-white">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">News Pulses</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+            <!-- Home -->
+            <li class="nav-item">
+              <a class="nav-link" href="#carouselExampleCaptions">Home</a>
+            </li>
+
+            <!-- Top Stories -->
+            <li class="nav-item">
+              <a class="nav-link" href="#top">Top Stories</a>
+            </li>
+
+            <!-- Categories dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#top" data-bs-toggle="dropdown">Categories</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/news/business/">Business</a></li>
+                <li><a class="dropdown-item" href="/news/crime/">Crime</a></li>
+                <li><a class="dropdown-item" href="/news/domestic/">Domestic</a></li>
+                <li><a class="dropdown-item" href="/news/education/">Education</a></li>
+                <li><a class="dropdown-item" href="/news/entertainment/">Entertainment</a></li>
+                <li><a class="dropdown-item" href="/news/food/">Food</a></li>
+                <li><a class="dropdown-item" href="/news/health/">Health</a></li>
+                <li><a class="dropdown-item" href="/news/lifestyle/">Lifestyle</a></li>
+                <li><a class="dropdown-item" href="/news/Politics/">Politics</a></li>
+                <li><a class="dropdown-item" href="/news/science/">Science</a></li>
+                <li><a class="dropdown-item" href="/news/technology/">Technology</a></li>
+                <li><a class="dropdown-item" href="/news/top/">Top</a></li>
+                <li><a class="dropdown-item" href="/news/tourism/">Tourism</a></li>
+                <li><a class="dropdown-item" href="/news/world/">World</a></li>
+                <li><a class="dropdown-item" href="/news/other/">Other</a></li>
+              </ul>
+            </li>
+
+            <!-- Opinion -->
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'opinion' %}">Opinion</a>
+            </li>
+
+            <!-- Videos -->
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'video' %}">Videos</a>
+            </li>
+
+            <!-- Podcasts
+            <li class="nav-item">
+              <a class="nav-link" href="/podcasts/">Podcasts</a>
+            </li>
+
+            Trending
+            <li class="nav-item">
+              <a class="nav-link" href="/trending/">Trending</a>
+            </li> -->
+
+            <!-- Bookmarks (only if user logged in) -->
+            {% if request.session.name %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'bookmark' %}">Bookmarks</a>
+            </li>
+            {% endif %}
+
+            <!-- About -->
+            <li class="nav-item">
+              <a class="nav-link" href="#about">About Us</a>
+            </li>
+
+            <!-- Subscribe -->
+            <li class="nav-item">
+              <a class="nav-link btn btn-warning ms-lg-3 text-dark" id="subscribeBtn" href="{% url 'subscribe' %}">Subscribe</a>
+            </li>
+
+          </ul>
+
+      <form class="d-flex" role="search" action="{% url 'search' %}" method="POST">
+        {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="Search" name="search" aria-label="Search"/>
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000" data-bs-pause="hover">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{% static 'images/headline2.jpg' %}" id="img" class="d-block w-100" alt="...">
+      <div class="carousel-caption carousel-caption-top d-none d-md-block">
+        <a href="https://www.thehindu.com/sci-tech/technology/microsoft-layoff-tech-giant-cuts-over-9000-employees-in-second-mass-layoff/article69765276.ece" target="_blank" id="head_link">Microsoft layoffs: Tech giant cuts nearly 9,000 employees in second mass layoff</a>
+        <p>Microsoft is firing thousands of workers, its second mass layoff in months. The tech giant began sending out layoff notices Wednesday (July 2, 2025).</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="{% static 'images/headline3.jpg' %}" id="img" class="d-block w-100" alt="...">
+      <div class="carousel-caption carousel-caption-top d-none d-md-block">
+        <a href="https://www.thehindu.com/news/national/jharkhand/one-dead-more-feared-trapped-after-portion-of-illegal-coal-mine-collapses-in-jharkhand/article69775669.ece" target="_blank" id="head_link">One dead, more feared trapped after portion of illegal coal mine collapses in Jharkhand</a>
+        <p>Ramgarh Deputy Commissioner (DC) Faiz Aq Ahmed Mumtaz told PTI: “We received information about the incident in the morning. An administrative team has been sent to the spot to investigate the matter.”</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="{% static 'images/headline4.jpg' %}" id="img" class="d-block w-100" alt="...">
+      <div class="carousel-caption carousel-caption-top d-none d-md-block">
+        <a href="https://www.thehindu.com/news/national/modi-will-bow-to-donald-trump-rahul-gandhi-attacks-prime-minister-as-deal-deadline-approaches/article69775718.ece" target="_blank" id="head_link">The U.S. President Donald Trump has set a deadline of July 9 to finalise the trade agreement with India.</a>
+        <p>Congress leader Rahul Gandhi on Saturday (July 5, 2025) attacked Prime Minister Narendra Modi over the Indo-U.S. trade deal, after Commerce Minister Piyush Goyal claimed that India would not enter into an agreement under deadlines.</p>
+      </div>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+
+
+<!-- <div class="d-flex justify-content-center mt-5 mb-5" id="top">
+    {% for cat in categories %}
+        <a href="/news/{{ cat }}/" class="btn btn-outline-primary btn-sm me-2">{{ cat|title }}</a>
+    {% endfor %}
+</div> -->
+
+<div class="d-flex justify-content-center mt-5 mb-5 position-relative" id="top">
+    <!-- Left Scroll Button -->
+    <button class="btn btn-light position-absolute start-0" id="scrollLeft" style="z-index: 10;">
+        <i class="bi bi-chevron-left"></i> <!-- Left Arrow -->
+    </button>
+
+    <!-- Categories Container -->
+    <div class="d-flex overflow-auto px-5" id="categoryContainer" style="scroll-behavior: smooth; white-space: nowrap;">
+        {% for cat in categories %}
+            <a href="/news/{{ cat }}/" class="btn btn-outline-primary btn-sm me-2">{{ cat|title }}</a>
+        {% endfor %}
+    </div>
+
+    <!-- Right Scroll Button -->
+    <button class="btn btn-light position-absolute end-0" id="scrollRight" style="z-index: 10;">
+        <i class="bi bi-chevron-right"></i> <!-- Right Arrow -->
+    </button>
+</div>
+
+
+
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    {% for article in articles %}
+    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+      <div class="card" style="width: 100%; overflow: hidden;">
+        <div class="image-overlay-container">
+          <img src="{{ article.image_url }}" class="card-img-top" alt="...">
+          <div class="overlay">
+            <a href="{{ article.url }}" class="btn btn-light readmore-btn">Read More</a>
+          </div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ article.title }}</h5>
+          <p class="card-text">{{ article.description }}</p>
+        </div>
+        <div>
+          <form action="{% url 'bookmark' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="title" value="{{ article.title }}">
+          <input type="hidden" name="description" value="{{ article.description }}">
+          <input type="hidden" name="image_url" value="{{ article.image_url }}">
+          <input type="hidden" name="article_url" value="{{ article.url }}">
+          <button type="submit" class="btn btn-dark save-btn">Save news</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    {% endfor %}
+  </div>
+</div>
+<hr>
+
+
+
+<!-- GNews Country Menu -->
+<div class="container">
+  <div class="row mt-5 mb-5"> 
+
+    <!-- Sidebar with vertical country menu -->
+    <div class="col-lg-2 col-md-4 mb-3">
+      <div class="d-flex flex-column align-items-start">
+        <h5 class="mb-3">Select Country</h5>
+        {% for code, name in gnews_countries.items %}
+          <a href="/gnews/{{ code }}" class="btn btn-outline-secondary btn-sm mb-2 w-100 text-start">
+            {{ name|upper }}
+          </a>
+        {% endfor %}
+      </div>
+    </div> 
+
+    <!-- Cards Section -->
+    <div class="container mt-4">
+  <div class="row justify-content-center">
+    {% for article in featured %}
+    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+      <div class="card" style="width: 100%; overflow: hidden;">
+        <div class="image-overlay-container">
+          <img src="{{ article.image }}" class="card-img-top" alt="...">
+          <div class="overlay">
+            <a href="{{ article.url }}" class="btn btn-light readmore-btn">Read More</a>
+          </div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ article.title }}</h5>
+          <p class="card-text">{{ article.description }}</p>
+        </div>
+        <div>
+          <form action="{% url 'bookmark' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="title" value="{{ article.title }}">
+          <input type="hidden" name="description" value="{{ article.description }}">
+          <input type="hidden" name="image_url" value="{{ article.image_url }}">
+          <input type="hidden" name="article_url" value="{{ article.url }}">
+          <button type="submit" class="btn btn-dark save-btn">Save news</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    {% endfor %}
+  </div>
+</div>
+  </div>
+</div> 
+
+ 
+<div class="container my-5" id="about">
+  <h2 class="text-center mb-4">About HEADPULSE</h2>
+  
+  <p class="lead text-center">
+    At <strong>HEADPULSE</strong>, we bring you the stories that matter — fast, accurate, and engaging.
+  </p>
+  
+  <hr class="my-4">
+
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <h4>Our Mission</h4>
+      <p>We believe that staying informed should be simple and impactful. 
+         HEADPULSE delivers breaking news, in-depth stories, and curated updates 
+         so you can always stay ahead of the curve.</p>
+    </div>
+    <div class="col-md-6">
+      <h4>What We Cover</h4>
+      <ul>
+        <li>National & International News</li>
+        <li>Business & Economy</li>
+        <li>Sports & Entertainment</li>
+        <li>Technology & Lifestyle</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <h4>Our Values</h4>
+      <p>Trust and quality drive everything we do:</p>
+      <ul>
+        <li><strong>Accuracy:</strong> Verified facts from reliable sources</li>
+        <li><strong>Speed:</strong> Real-time updates</li>
+        <li><strong>Clarity:</strong> News made simple and accessible</li>
+        <li><strong>Engagement:</strong> Features like bookmarking and easy navigation</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row mt-5 text-center">
+    <div class="col">
+      <h4>Join Us on the Journey</h4>
+      <p>Stay connected with the pulse of the world. Explore, bookmark, and never miss a story that matters.</p>
+    </div>
+  </div>
+</div>
+
+
+<footer class="bg-dark text-white pt-5 pb-4 mt-5">
+  <div class="container">
+    <div class="row">
+
+      <!-- Brand / About -->
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h5 class="fw-bold text-uppercase">HEADPULSE</h5>
+        <p>
+          Bringing you real-time news, insights, and stories that matter. 
+          Stay informed with speed, accuracy, and clarity.
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-lg-2 col-md-6 mb-4">
+        <h6 class="fw-bold">Quick Links</h6>
+        <ul class="list-unstyled">
+          <li><a href="#top" class="text-white text-decoration-none">Home</a></li>
+          <li><a href="{% url 'opinion' %}" class="text-white text-decoration-none">Opinion</a></li>
+          <li><a href="{% url 'video' %}" class="text-white text-decoration-none">Videos</a></li>
+          <li><a href="/subscribe/" class="text-white text-decoration-none">Subscribe</a></li>
+        </ul>
+      </div>
+
+      <!-- Categories -->
+      <div class="col-lg-3 col-md-6 mb-4">
+        <h6 class="fw-bold">Categories</h6>
+        <ul class="list-unstyled">
+          <li><a href="/news/general/" class="text-white text-decoration-none">General</a></li>
+          <li><a href="/news/business/" class="text-white text-decoration-none">Business</a></li>
+          <li><a href="/news/technology/" class="text-white text-decoration-none">Technology</a></li>
+          <li><a href="/news/sports/" class="text-white text-decoration-none">Sports</a></li>
+          <li><a href="/news/entertainment/" class="text-white text-decoration-none">Entertainment</a></li>
+        </ul>
+      </div>
+
+      <!-- Connect / Social -->
+      <div class="col-lg-3 col-md-6 mb-4">
+        <h6 class="fw-bold">Connect With Us</h6>
+        <div class="d-flex gap-3">
+          <a href="#" class="text-white fs-5"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-white fs-5"><i class="bi bi-twitter-x"></i></a>
+          <a href="#" class="text-white fs-5"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="text-white fs-5"><i class="bi bi-youtube"></i></a>
+        </div>
+        <div class="mt-3">
+          <a href="#" class="btn btn-outline-light btn-sm me-2">Google Play</a>
+          <a href="#" class="btn btn-outline-light btn-sm">App Store</a>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="mb-3">
+
+    <!-- Bottom -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+      <p class="mb-0">© 2025 HEADPULSE. All rights reserved.</p>
+      <p class="mb-0">
+        <a href="#" class="text-white text-decoration-none">Privacy Policy</a> | 
+        <a href="#" class="text-white text-decoration-none">Terms of Use</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+
+
+
+<!-- Toast container -->
+<!--This is the container to shoe the popup message for the user \-->
+<div class="position-fixed top-0 start-0 p-3" style="z-index: 11">
+    <div id="subscribeToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="toastMessage">
+                Subscription successful!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" 
+integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
+<script>
+  const b=document.getElementById('darkModeToggle');
+  const a=document.getElementById('circlefill');
+  b.addEventListener('click', function(e){
+    e.preventDefault();
+    if (document.body.style.backgroundColor == 'white'){
+      document.body.style.backgroundColor = 'black';
+      a.classList.remove('bi-circle-half');
+      a.classList.add('bi-circle-fill');
+    }
+    else {
+      document.body.style.backgroundColor = 'white';
+      a.classList.remove('bi-circle-fill');
+      a.classList.add('bi-circle-half');
+    }
+  })
+
+  const container = document.getElementById('categoryContainer');
+    const scrollLeft = document.getElementById('scrollLeft');
+    const scrollRight = document.getElementById('scrollRight');
+
+    scrollLeft.addEventListener('click', () => {
+        container.scrollBy({ left: -150, behavior: 'smooth' });
+    });
+
+    scrollRight.addEventListener('click', () => {
+        container.scrollBy({ left: 150, behavior: 'smooth' });
+    });
+
+
+</script>
+
+
+
+
+
+<script>
+document.getElementById('subscribeBtn').addEventListener('click', function(e){
+    e.preventDefault();
+
+    fetch("{% url 'subscribe' %}", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "Content-Type": "application/json"
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const toastEl = document.getElementById('subscribeToast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        if(data.status === "success"){
+            toastEl.classList.remove('bg-danger');
+            toastEl.classList.add('bg-success');
+        } else {
+            toastEl.classList.remove('bg-success');
+            toastEl.classList.add('bg-danger');
+        }
+
+        toastMessage.textContent = data.message;
+
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+    })
+    .catch(error => console.error("Error:", error));
+});
+</script>
+
+</body>
+</html>
